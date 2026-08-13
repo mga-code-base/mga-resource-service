@@ -1,0 +1,98 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '4.0.5' // Synced with parent pom reference
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.graalvm.buildtools.native' version '0.10.4' 
+}
+
+group = 'com.mygym.app'
+version = '0.0.3'
+description = 'mga-resource-service'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25) 
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' } // Synced with maven jitpack repository
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:2025.1.2"
+    }
+}
+
+dependencies {
+    // Base Shared Dependencies
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    
+    // 🎯 REPLACED STRATEGY: Official Spring Security Resource Server (Precompiled GraalVM Native Hints Built-in)
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    
+    // Git/Jitpack Custom Repository Model Match
+    implementation 'com.github.my-gym-app:mga-all-models:ec625be5f9'
+    
+    // GraalVM SDK mapped from <scope>provided</scope>
+    compileOnly 'org.graalvm.sdk:graal-sdk:24.1.1'
+    
+    // Conditional Profiles Isolation (Mimicking Maven Profiles: dev vs native)
+    // If the task does NOT contain 'native' or 'bootBuildImage', inject the Eureka Client
+    if (!project.gradle.startParameter.taskNames.any { it.contains("native") || it.contains("bootBuildImage") }) {
+        implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    }
+
+    // Test Scaffolding
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.junit.platform:junit-platform-launcher:1.11.4'
+    testImplementation 'org.junit.platform:junit-platform-engine:1.11.4'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.11.4'
+}
+
+configurations.all {
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        if (details.requested.group == 'org.junit.platform') {
+            details.useVersion '1.11.4'
+        }
+        if (details.requested.group == 'org.junit.jupiter') {
+            details.useVersion '5.11.4'
+        }
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+bootJar {
+    mainClass = 'com.mygym.app.MgaResourceServiceApplication'
+}
+
+tasks.named('bootBuildImage') {
+    builder = 'paketobuildpacks/builder-jammy-java-tiny'
+    pullPolicy = 'ALWAYS'
+    environment = [
+        'BP_NATIVE_IMAGE'                  : 'true',
+        'BP_JVM_VERSION'                   : '25',
+        'BPE_APPEND_SPRING_PROFILES_ACTIVE': 'native',
+        'BPE_APPEND_ACTIVATEDENV'          : 'PRD', 
+        'BP_NATIVE_IMAGE_BUILD_ARGUMENTS'  : 
+            '--initialize-at-run-time=sun.security.util.Password$ConsoleHolder ' +
+            '--initialize-at-build-time=com.fasterxml.jackson' 
+    ]
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs << "-Aspring.profiles.active=native"
+    options.compilerArgs << "-AactivatedEnv=PRD"
+}
+
+tasks.named('processAot') {
+    args '--spring.profiles.active=native', '--activatedEnv=PRD'
+}
