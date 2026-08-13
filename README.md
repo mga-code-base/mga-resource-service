@@ -27,26 +27,6 @@ It sits behind the Kubernetes Gateway (Porkbun DNS → Cloudflare → K8s Gatewa
 
 ---
 
-## 📡 Core API Controller Endpoints
-
-### Classes & Schedules Controller (`/api/v1/resources/classes`)
-* `GET /api/v1/resources/classes` - View upcoming fitness classes and schedules
-* `GET /api/v1/resources/classes/{id}` - Retrieve detailed schedule for a specific class
-* `POST /api/v1/resources/classes` - Create new fitness class schedule (Admin/Trainer)
-* `PUT /api/v1/resources/classes/{id}` - Modify existing class schedule or capacity limits
-* `DELETE /api/v1/resources/classes/{id}` - Cancel/remove class schedule
-
-### Bookings Controller (`/api/v1/resources/bookings`)
-* `POST /api/v1/resources/bookings` - Reserve a slot in an available class
-* `GET /api/v1/resources/bookings/me` - List active class bookings for authenticated member
-* `DELETE /api/v1/resources/bookings/{bookingId}` - Cancel existing class reservation
-
-### Equipment Management Controller (`/api/v1/resources/equipment`)
-* `GET /api/v1/resources/equipment` - Retrieve status and availability of gym equipment
-* `PUT /api/v1/resources/equipment/{id}/maintenance` - Flag equipment for maintenance or update operational status
-
----
-
 ## ⚙️ Build & Deployment Instructions
 # Standard JVM Run
 ./gradlew bootRun
