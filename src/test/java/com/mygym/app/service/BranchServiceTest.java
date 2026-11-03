@@ -43,8 +43,7 @@ class BranchServiceTest {
     @Test
     @DisplayName("Should create branch via RestClient post request")
     void testCreateBranch_Success() {
-        Branch branch = new Branch();
-        branch.setBranchId("B-101");
+        Branch branch = new Branch(null, "B-101", null, null, null, null, null, null, null);
 
         when(restClient.post()).thenReturn(requestBodyUriSpec);
         when(requestBodyUriSpec.body(eq(branch))).thenReturn(requestBodySpec);
@@ -59,8 +58,7 @@ class BranchServiceTest {
     @Test
     @DisplayName("Should fetch and filter active branches")
     void testGetAllBranch_Success() {
-        Branch branch1 = new Branch();
-        branch1.setIsActive(true);
+        Branch branch1 = new Branch(null, null, null, null, null, null, null, null, true);
 
         BranchWrapper wrapper = new BranchWrapper(List.of(branch1));
 
@@ -72,6 +70,6 @@ class BranchServiceTest {
         BranchWrapper result = branchService.getAllBranch();
 
         assertNotNull(result);
-        assertEquals(1, result.getAllBranches().size());
+        assertEquals(1, result.allBranches().size());
     }
 }

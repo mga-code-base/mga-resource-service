@@ -31,7 +31,7 @@ class BranchControllerTest {
     @Test
     @DisplayName("Should create branch and return generated ID")
     void testCreateBranch_Success() {
-        Branch branch = new Branch();
+        Branch branch = new Branch(null, null, null, null, null, null, null, null, null);
         when(service.createBranch(any(Branch.class))).thenReturn("B-101");
 
         String result = controller.createBranch(branch);
@@ -43,7 +43,7 @@ class BranchControllerTest {
     @Test
     @DisplayName("Should fetch all branches")
     void testGetAllBranch_Success() {
-        BranchWrapper wrapper = new BranchWrapper(List.of(new Branch()));
+        BranchWrapper wrapper = new BranchWrapper(List.of(new Branch(null, null, null, null, null, null, null, null, null)));
         when(service.getAllBranch()).thenReturn(wrapper);
 
         BranchWrapper result = controller.getAllBranch();
@@ -55,7 +55,7 @@ class BranchControllerTest {
     @Test
     @DisplayName("Should fetch all branch names")
     void testGetAllBrancheNames_Success() {
-        BranchNameWrapper wrapper = new BranchNameWrapper();
+        BranchNameWrapper wrapper = new BranchNameWrapper(null);
         when(service.getAllBranchNames()).thenReturn(wrapper);
 
         BranchNameWrapper result = controller.getAllBrancheNames();
@@ -67,20 +67,19 @@ class BranchControllerTest {
     @Test
     @DisplayName("Should fetch branch by ID")
     void testGetBranch_Success() {
-        Branch branch = new Branch();
-        branch.setBranchId("B-101");
+        Branch branch = new Branch(null, "B-101", null, null, null, null, null, null, null);
         when(service.getBranch("B-101")).thenReturn(branch);
 
         Branch result = controller.getBranch("B-101");
 
         assertNotNull(result);
-        assertEquals("B-101", result.getBranchId());
+        assertEquals("B-101", result.branchId());
     }
 
     @Test
     @DisplayName("Should add equipment to branch and return 200 OK")
     void testAddEquipmentToBranch_Success() {
-        Branch branch = new Branch();
+        Branch branch = new Branch(null, null, null, null, null, null, null, null, null);
         when(service.addEquipmentToBranch("B-101", "Treadmill", "Legs", true)).thenReturn(branch);
 
         ResponseEntity<Branch> response = controller.addEquipmentToBranch("B-101", "Treadmill", "Legs", true);

@@ -37,7 +37,7 @@ class GrievanceServiceTest {
     @Test
     @DisplayName("Should fetch all grievances downstream")
     void testGetAllGrievances_Success() {
-        GrievanceWrapper wrapper = new GrievanceWrapper(List.of(new Grievance()));
+        GrievanceWrapper wrapper = new GrievanceWrapper(List.of(new Grievance(null, null, null, null, null, null, null, null, null, null)));
 
         when(restClient.get()).thenReturn(requestHeadersUriSpec);
         when(requestHeadersUriSpec.uri(eq("/allactive"))).thenReturn(requestHeadersSpec);

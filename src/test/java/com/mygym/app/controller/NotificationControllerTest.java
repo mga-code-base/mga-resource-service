@@ -25,7 +25,7 @@ class NotificationControllerTest {
     @Test
     @DisplayName("Should create notification and return ID string")
     void testCreateNotification_Success() {
-        Notification notification = new Notification();
+        Notification notification = new Notification(null, null, null, null, null, null);
         when(service.createNotification(any(Notification.class))).thenReturn("N-901");
 
         String result = controller.createNotification(notification);

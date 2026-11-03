@@ -8,7 +8,6 @@ import static com.mygym.app.util.ResourceConstants.EQUIPMENTS_UPDATE;
 import static com.mygym.app.util.ResourceConstants.GET_BY_ADMIN_ID_ENPOINT;
 import static com.mygym.app.util.ResourceConstants.ID_ENDPOINT;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -22,9 +21,6 @@ import com.mygym.app.models.BranchNameWrapper;
 import com.mygym.app.models.BranchWrapper;
 import com.mygym.app.models.Equipment;
 
-/**
- * Service orchestrating branch configurations, equipment updates, and admin assignments across CRUD storage.
- */
 @Service
 public class BranchService {
 
@@ -35,10 +31,8 @@ public class BranchService {
     }
 
     public String createBranch(Branch branch) {
-        List<String> branchAdminsList = Arrays.asList(branch.getBranchId());
-        branch.setAdminIds(branchAdminsList);
         return restClient.post()
-                .body(branch)
+                .body(branch.withAdminIds(List.of(branch.branchId())))
                 .retrieve()
                 .body(String.class);
     }
@@ -48,9 +42,9 @@ public class BranchService {
                 .uri(ALL_ENDPOINT)
                 .retrieve()
                 .body(BranchWrapper.class);
-        List<Branch> allBranches = wrapper.getAllBranches();
+        List<Branch> allBranches = wrapper.allBranches();
         allBranches = allBranches.stream().filter(branch -> Objects.nonNull(
-                branch.getIsActive()) && branch.getIsActive())
+                branch.isActive()) && branch.isActive())
                 .collect(Collectors.toList());
         return new BranchWrapper(allBranches);
     }

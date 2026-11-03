@@ -34,7 +34,7 @@ class NotificationServiceTest {
     @Test
     @DisplayName("Should create notification downstream and return ID string")
     void testCreateNotification_Success() {
-        Notification notification = new Notification();
+        Notification notification = new Notification(null, null, null, null, null, null);
         when(restClient.post()).thenReturn(requestBodyUriSpec);
         when(requestBodyUriSpec.body(eq(notification))).thenReturn(requestBodySpec);
         when(requestBodySpec.retrieve()).thenReturn(responseSpec);
