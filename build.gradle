@@ -17,7 +17,7 @@ java {
 
 repositories {
     mavenCentral()
-    maven { url 'https://jitpack.io' } // Synced with maven jitpack repository
+    maven { url 'https://jitpack.io' }
 }
 
 dependencyManagement {
@@ -37,7 +37,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
     
     // Git/Jitpack Custom Repository Model Match
-    implementation 'com.github.my-gym-app:mga-all-models:ec625be5f9'
+    implementation 'com.github.mga-code-base:mga-all-models-jars:release-v1.1-SNAPSHOT'
     
     // GraalVM SDK mapped from <scope>provided</scope>
     compileOnly 'org.graalvm.sdk:graal-sdk:24.1.1'
