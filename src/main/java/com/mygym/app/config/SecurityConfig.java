@@ -23,10 +23,10 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PlatformEndpoints.PUBLIC).permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/branch").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/branch/**").permitAll()
-                        .requestMatchers("/api/branch", "/api/branch/**", "/api/grievances", "/api/grievances/**",
-                                "/api/notifications", "/api/notifications/**")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/branch").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/branch/**").permitAll()
+                        .requestMatchers("/api/v1/branch", "/api/v1/branch/**", "/api/v1/grievances", "/api/v1/grievances/**",
+                                "/api/v1/notifications", "/api/v1/notifications/**")
                             .hasAnyRole("ADMIN", "TRAINER", "MEMBER")
                         .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.jwtAuthenticationConverter(JwtRoleConverter.create())))

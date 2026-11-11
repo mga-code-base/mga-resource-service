@@ -20,7 +20,7 @@ public class ResourceConstants {
 
 	public static final String BRANCH_CRUD_PATH = "/crud/branches";
 	
-	public final static String BRANCH_REST_MAPPING = "/api/branch";
+	public final static String BRANCH_REST_MAPPING = "/api/v1/branch";
 	
 	public final static String GET_BY_ADMIN_ID_ENPOINT = "/getbyadminid/{adminid}";
 	
@@ -30,7 +30,7 @@ public class ResourceConstants {
 	
 	public final static String GRIEVANCE_ID_ENPOINT = "/{id}";
 	
-	public final static String GRIEVANCE_REST_MAPPING = "/api/grievances";
+	public final static String GRIEVANCE_REST_MAPPING = "/api/v1/grievances";
 	
 	public final static String GRIEVANCE_ACTIVE_IN_BRANCH_ID = "/allactive/{id}";
 	
@@ -44,7 +44,7 @@ public class ResourceConstants {
 	
 	public static final String NOTIFICATION_CRUD_REST_BASE = "/crud/notifications";
 	
-	public final static String NOTIFICATION_REST_MAPPING = "/api/notifications";
+	public final static String NOTIFICATION_REST_MAPPING = "/api/v1/notifications";
 	
 	public final static String NOTIFICATIONS_ID_ENPOINT = "/{id}";
 	

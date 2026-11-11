@@ -13,7 +13,7 @@ import com.mygym.app.service.NotificationService;
 import com.mygym.app.validation.OnCreate;
 
 @RestController
-@RequestMapping("/api/notifications") // 🎯 Fixed: Clean absolute string path to bypass trailing-slash 403 blocks
+@RequestMapping("/api/v1/notifications") // 🎯 Fixed: Clean absolute string path to bypass trailing-slash 403 blocks
 public class NotificationController {
 
     private final NotificationService service;

@@ -20,7 +20,7 @@ import com.mygym.app.service.GrievanceService;
 import com.mygym.app.validation.OnCreate;
 
 @RestController
-@RequestMapping("/api/grievances") // 🎯 Fixed: Absolute, standardized string path
+@RequestMapping("/api/v1/grievances") // 🎯 Fixed: Absolute, standardized string path
 public class GrievanceController {
 
     private final GrievanceService service;
