@@ -48,7 +48,7 @@ class GrievanceControllerTest {
         GrievanceWrapper result = controller.getAllGrievances();
 
         assertNotNull(result);
-        verify(service, times(1)).allGrievances();
+        verify(service, times(1)).getAllGrievances();
     }
 
     @Test
