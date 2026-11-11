@@ -10,8 +10,11 @@ import static com.mygym.app.util.ResourceConstants.ID_ENDPOINT;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -20,11 +23,15 @@ import com.mygym.app.models.Branch;
 import com.mygym.app.models.BranchNameWrapper;
 import com.mygym.app.models.BranchWrapper;
 import com.mygym.app.models.Equipment;
+import com.mygym.app.web.DownstreamUnavailableException;
 
 @Service
 public class BranchService {
 
-    private RestClient restClient;
+    private static final Logger LOGGER = LoggerFactory.getLogger(BranchService.class);
+
+    private final RestClient restClient;
+    private final AtomicReference<BranchNameWrapper> lastKnownBranchNames = new AtomicReference<>();
 
     public BranchService(@Qualifier(BRANCH_CRUD_BEAN) RestClient restClient) {
         this.restClient = restClient;
@@ -50,10 +57,23 @@ public class BranchService {
     }
 
     public BranchNameWrapper getAllBranchNames() {
-        return restClient.get()
-                .uri(ALL_BRANCH_NAME_ENDPOINT)
-                .retrieve()
-                .body(BranchNameWrapper.class);
+        try {
+            BranchNameWrapper names = restClient.get()
+                    .uri(ALL_BRANCH_NAME_ENDPOINT)
+                    .retrieve()
+                    .body(BranchNameWrapper.class);
+            if (names != null) {
+                lastKnownBranchNames.set(names);
+            }
+            return names;
+        } catch (DownstreamUnavailableException e) {
+            BranchNameWrapper cached = lastKnownBranchNames.get();
+            if (cached == null) {
+                throw e;
+            }
+            LOGGER.warn("Serving last known branch names while {} is unavailable", e.getDownstream());
+            return cached;
+        }
     }
 
     public Branch getBranchByAdminId(String adminId) {

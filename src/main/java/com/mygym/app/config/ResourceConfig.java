@@ -1,52 +1,44 @@
 package com.mygym.app.config;
 
-import static com.mygym.app.util.ResourceConstants.APP_JSON;
 import static com.mygym.app.util.ResourceConstants.BRANCH_CRUD_BEAN;
-import static com.mygym.app.util.ResourceConstants.CONTENT_TYPE;
-import static com.mygym.app.util.ResourceConstants.DEV_BRANCH_BASE_URL;
-import static com.mygym.app.util.ResourceConstants.DEV_GRIEVANCE_BASE_URL;
-import static com.mygym.app.util.ResourceConstants.DEV_NOTIFICATIONS_BASE_URL;
+import static com.mygym.app.util.ResourceConstants.BRANCH_CRUD_PATH;
 import static com.mygym.app.util.ResourceConstants.GRIEVANCE_CRUD_BEAN;
+import static com.mygym.app.util.ResourceConstants.GRIEVANCE_CRUD_PATH;
 import static com.mygym.app.util.ResourceConstants.NOTIFICATIONS_CRUD_BEAN;
-import static com.mygym.app.util.ResourceConstants.PRD_BRANCH_BASE_URL;
-import static com.mygym.app.util.ResourceConstants.PRD_GRIEVANCE_BASE_URL;
-import static com.mygym.app.util.ResourceConstants.PRD_NOTIFICATIONS_BASE_URL;
+import static com.mygym.app.util.ResourceConstants.NOTIFICATIONS_CRUD_PATH;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 
+import com.mygym.app.client.DownstreamClients;
+
 @Configuration
 public class ResourceConfig {
 
-	 @Value("${app.environment}")
-	 private String env;
-    
+    private static final String RESOURCE_CRUD = "resource-crud";
+
+    private final DownstreamClients clients;
+    private final String resourceCrudUrl;
+
+    public ResourceConfig(DownstreamClients clients, @Value("${mga.clients.resource-crud-url}") String resourceCrudUrl) {
+        this.clients = clients;
+        this.resourceCrudUrl = resourceCrudUrl;
+    }
+
     @Bean(name = BRANCH_CRUD_BEAN)
-    public RestClient restAdminClient() {
-    	String baseUrl = env.contentEquals("DEV") ? DEV_BRANCH_BASE_URL : PRD_BRANCH_BASE_URL;
-        return RestClient.builder()
-                .baseUrl(baseUrl)
-                .defaultHeader(CONTENT_TYPE, APP_JSON)
-                .build();
+    public RestClient branchCrudClient() {
+        return clients.create(RESOURCE_CRUD, resourceCrudUrl + BRANCH_CRUD_PATH);
     }
-    
+
     @Bean(name = GRIEVANCE_CRUD_BEAN)
-    public RestClient restTrainerClient() {
-    	String baseUrl = env.contentEquals("DEV") ? DEV_GRIEVANCE_BASE_URL : PRD_GRIEVANCE_BASE_URL;
-        return RestClient.builder()
-                .baseUrl(baseUrl)
-                .defaultHeader(CONTENT_TYPE, APP_JSON)
-                .build();
+    public RestClient grievanceCrudClient() {
+        return clients.create(RESOURCE_CRUD, resourceCrudUrl + GRIEVANCE_CRUD_PATH);
     }
-    
+
     @Bean(name = NOTIFICATIONS_CRUD_BEAN)
-    public RestClient restCrudClient() {
-    	String baseUrl = env.contentEquals("DEV") ? DEV_NOTIFICATIONS_BASE_URL : PRD_NOTIFICATIONS_BASE_URL;
-        return RestClient.builder()
-                .baseUrl(baseUrl)
-                .defaultHeader(CONTENT_TYPE, APP_JSON)
-                .build();
+    public RestClient notificationsCrudClient() {
+        return clients.create(RESOURCE_CRUD, resourceCrudUrl + NOTIFICATIONS_CRUD_PATH);
     }
 }

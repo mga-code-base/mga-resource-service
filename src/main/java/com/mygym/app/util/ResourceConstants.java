@@ -2,9 +2,7 @@ package com.mygym.app.util;
 
 public class ResourceConstants {
 	
-	public final static String CONTENT_TYPE = "Content-Type";
 	
-	public final static String APP_JSON = "application/json";
 	
 	public final static String ALL_ENDPOINT = "/all";
 	
@@ -20,9 +18,7 @@ public class ResourceConstants {
 	
 	public final static String BRANCH_CRUD_BEAN = "branchCrudClient";
 
-	public final static String DEV_BRANCH_BASE_URL = "http://mga-resource-crud-service/crud/branches";
-	
-	public final static String PRD_BRANCH_BASE_URL = "http://mga-resource-crud-service.default.svc.cluster.local:80/crud/branches";
+	public static final String BRANCH_CRUD_PATH = "/crud/branches";
 	
 	public final static String BRANCH_REST_MAPPING = "/api/branch";
 	
@@ -30,9 +26,7 @@ public class ResourceConstants {
 	
 	public final static String GRIEVANCE_CRUD_BEAN = "grievanceCrudClient";
 	
-	public final static String DEV_GRIEVANCE_BASE_URL = "http://mga-resource-crud-service/crud/grievances";
-	
-	public final static String PRD_GRIEVANCE_BASE_URL = "http://mga-resource-crud-service.default.svc.cluster.local:80/crud/grievances";
+	public static final String GRIEVANCE_CRUD_PATH = "/crud/grievances";
 	
 	public final static String GRIEVANCE_ID_ENPOINT = "/{id}";
 	
@@ -46,9 +40,7 @@ public class ResourceConstants {
 	
 	public final static String NOTIFICATIONS_CRUD_BEAN = "notificationsCrudClient";
 	
-	public final static String DEV_NOTIFICATIONS_BASE_URL = "http://mga-resource-crud-service/crud/notifications";
-	
-	public final static String PRD_NOTIFICATIONS_BASE_URL = "http://mga-resource-crud-service.default.svc.cluster.local:80/crud/notifications";
+	public static final String NOTIFICATIONS_CRUD_PATH = "/crud/notifications";
 	
 	public static final String NOTIFICATION_CRUD_REST_BASE = "/crud/notifications";
 	

@@ -1,16 +1,20 @@
 package com.mygym.app.controller;
 
-import static com.mygym.app.util.ResourceConstants.BRANCH_REST_MAPPING;
-import static com.mygym.app.util.ResourceConstants.ALL_ENDPOINT;
 import static com.mygym.app.util.ResourceConstants.ALL_BRANCH_NAME_ENDPOINT;
-import static com.mygym.app.util.ResourceConstants.GET_BY_ADMIN_ID_ENPOINT;
+import static com.mygym.app.util.ResourceConstants.ALL_ENDPOINT;
+import static com.mygym.app.util.ResourceConstants.BRANCH_REST_MAPPING;
 import static com.mygym.app.util.ResourceConstants.EQUIPMENTS_ADD;
 import static com.mygym.app.util.ResourceConstants.EQUIPMENTS_UPDATE;
+import static com.mygym.app.util.ResourceConstants.GET_BY_ADMIN_ID_ENPOINT;
 import static com.mygym.app.util.ResourceConstants.ID_ENDPOINT;
+
+import jakarta.validation.Valid;
+import jakarta.validation.groups.Default;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +28,7 @@ import com.mygym.app.models.Branch;
 import com.mygym.app.models.BranchNameWrapper;
 import com.mygym.app.models.BranchWrapper;
 import com.mygym.app.service.BranchService;
+import com.mygym.app.validation.OnCreate;
 
 @RestController
 @RequestMapping(BRANCH_REST_MAPPING)
@@ -37,7 +42,7 @@ public class BranchController {
     }
     
     @PostMapping
-    public String createBranch(@RequestBody Branch branch) {
+    public String createBranch(@Validated({Default.class, OnCreate.class}) @RequestBody Branch branch) {
         return service.createBranch(branch);
     }
     
@@ -74,7 +79,7 @@ public class BranchController {
 	
     // Path maps to: PUT /api/branch/{id}
     @PutMapping(ID_ENDPOINT)
-    public Branch updateBranch(@PathVariable("id") String branchId, @RequestBody Branch branch) {
+    public Branch updateBranch(@PathVariable("id") String branchId, @Valid @RequestBody Branch branch) {
         return service.updateBranch(branchId, branch);
     }
 	
