@@ -46,7 +46,7 @@ class BranchServiceTest {
         Branch branch = new Branch(null, "B-101", null, null, null, null, null, null, null);
 
         when(restClient.post()).thenReturn(requestBodyUriSpec);
-        when(requestBodyUriSpec.body(eq(branch))).thenReturn(requestBodySpec);
+        when(requestBodyUriSpec.body(eq(branch.withAdminIds(List.of("B-101"))))).thenReturn(requestBodySpec);
         when(requestBodySpec.retrieve()).thenReturn(responseSpec);
         when(responseSpec.body(String.class)).thenReturn("B-101");
 
